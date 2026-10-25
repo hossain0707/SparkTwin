@@ -1,0 +1,114 @@
+name: Test and build SparkTwin
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, windows-latest, macos-latest]
+        python: ['3.11', '3.12', '3.13']
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Install app and tests
+        run: python -m pip install -e ".[dev]"
+      - name: Run test suite
+        run: python -m pytest -q
+      - name: Validate browser JavaScript
+        run: node --check sparktwin/web/app.js
+      - name: Verify native app asset layout
+        run: python desktop_launcher.py --self-test
+
+  desktop-build:
+    needs: test
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            label: Windows-x64
+            separator: ";"
+          - os: macos-15-intel
+            label: macOS-Intel
+            separator: ":"
+          - os: macos-latest
+            label: macOS-Apple-Silicon
+            separator: ":"
+          - os: ubuntu-24.04
+            label: Linux-x64
+            separator: ":"
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Linux webview prerequisites
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y libgtk-3-0 libwebkit2gtk-4.1-0 libgirepository-2.0-0 dpkg-dev
+      - name: Install packaging dependencies
+        run: python -m pip install -e ".[build]"
+      - name: Build standalone desktop app
+        run: >-
+          pyinstaller --noconfirm --clean --onedir --windowed --name SparkTwin
+          --add-data "sparktwin/web${{ matrix.separator }}sparktwin/web"
+          --collect-all webview
+          desktop_launcher.py
+      - name: Linux packaged asset and Python integrity
+        if: runner.os == 'Linux'
+        run: ./dist/SparkTwin/SparkTwin --self-test
+      - name: macOS packaged asset and Python integrity
+        if: runner.os == 'macOS'
+        run: ./dist/SparkTwin.app/Contents/MacOS/SparkTwin --self-test
+      - name: Windows packaged asset and Python integrity
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: '& .\dist\SparkTwin\SparkTwin.exe --self-test; if ($LASTEXITCODE -ne 0) { exit 1 }'
+      - name: Windows portable ZIP
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: Compress-Archive -Path dist\SparkTwin -DestinationPath SparkTwin-Windows-x64-portable.zip
+      - name: macOS unsigned DMG
+        if: runner.os == 'macOS'
+        run: hdiutil create -volname SparkTwin -srcfolder dist/SparkTwin.app -ov -format UDZO SparkTwin-${{ matrix.label }}-unsigned.dmg
+      - name: Linux portable archive and DEB
+        if: runner.os == 'Linux'
+        shell: bash
+        run: |
+          tar -czf SparkTwin-Linux-x64-portable.tar.gz -C dist SparkTwin
+          bash scripts/package_deb.sh
+      - uses: actions/upload-artifact@v4
+        if: runner.os == 'Windows'
+        with:
+          name: SparkTwin-Windows-x64-preview
+          path: SparkTwin-Windows-x64-portable.zip
+          retention-days: 30
+      - uses: actions/upload-artifact@v4
+        if: runner.os == 'macOS'
+        with:
+          name: SparkTwin-${{ matrix.label }}-preview
+          path: SparkTwin-${{ matrix.label }}-unsigned.dmg
+          retention-days: 30
+      - uses: actions/upload-artifact@v4
+        if: runner.os == 'Linux'
+        with:
+          name: SparkTwin-Linux-x64-preview
+          path: |
+            SparkTwin-Linux-x64-portable.tar.gz
+            SparkTwin-Linux-x64-preview.deb
+          retention-days: 30

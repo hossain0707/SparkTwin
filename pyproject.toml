@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sparktwin"
+version = "0.1.0"
+description = "Local-first DGX Spark AI memory-capacity planner and evidence-backed benchmark digital twin"
+readme = "README.md"
+requires-python = ">=3.11"
+license = {text = "Proprietary — see LICENSE-NOTICE.md"}
+authors = [{name = "Md Najmul Hossain"}]
+keywords = ["dgx-spark", "inference", "capacity-planning", "gpu-memory", "private-ai"]
+dependencies = ["reportlab>=4.2,<5"]
+
+[project.optional-dependencies]
+desktop = ["pywebview>=5,<7"]
+build = ["pyinstaller>=6,<8", "pywebview>=5,<7"]
+dev = ["pytest>=8,<10"]
+
+[project.scripts]
+sparktwin = "sparktwin.app:main"
+
+[tool.setuptools]
+packages = ["sparktwin"]
+include-package-data = true
+
+[tool.setuptools.package-data]
+sparktwin = ["web/*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
