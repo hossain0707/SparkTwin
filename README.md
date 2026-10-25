@@ -1,145 +1,251 @@
 <div align="center">
 
-<img src="docs/sparktwin-banner.svg" alt="SparkTwin — Understand AI workload memory before deployment" width="100%" />
+<img src="docs/sparktwin-banner.svg" alt="SparkTwin — Know before you deploy. Local-first AI capacity planning for DGX Spark and unified-memory inference systems." width="100%" />
 
 # SparkTwin
 
-**Local-first AI capacity intelligence for NVIDIA DGX Spark and private inference systems.**
+### The local-first capacity planning workbench for private AI.
 
-Plan memory. Compare model configurations. Inspect SSH-managed Linux hosts. Calibrate performance only with real, recorded evidence.
+Understand model memory requirements, explore deployment trade-offs, compare configurations, and document the assumptions behind your decisions — **before committing valuable GPU time**.
 
-**v0.1.0 · Development preview** &nbsp; | &nbsp; **Windows · macOS · Linux** &nbsp; | &nbsp; **Private by default**
+**NVIDIA DGX Spark · Custom Linux inference hosts · Windows / macOS / Linux**
 
-[Get started](#get-started) · [Animated tour](#animated-product-tour) · [Architecture](#architecture) · [Features](#features) · [Download installers](#download-and-install) · [Development handover](START_HERE.md)
+[**Get the desktop app**](https://github.com/hossain0707/SparkTwin/releases/tag/v0.1.0-preview.7) · [See the product tour](#product-tour) · [Explore the architecture](#architecture) · [Read the documentation](#documentation-and-project-continuity)
+
+[![Test and build SparkTwin](https://github.com/hossain0707/SparkTwin/actions/workflows/ci.yml/badge.svg)](https://github.com/hossain0707/SparkTwin/actions/workflows/ci.yml)
+[![GitHub preview release](https://img.shields.io/badge/release-v0.1.0%20preview-5bd7ba?labelColor=182b3d)](https://github.com/hossain0707/SparkTwin/releases/tag/v0.1.0-preview.7)
+![Platforms](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-7da8f5?labelColor=182b3d)
+![Python](https://img.shields.io/badge/Python-3.11%2B-7da8f5?labelColor=182b3d)
 
 </div>
 
 > [!IMPORTANT]
-> **This is a working, testable development MVP, not a certified production-grade simulator.** It provides first-order analytical memory estimates, not guaranteed deployability, tokens/second or energy consumption. Remote SSH is optional, read-only and requires your existing secure OpenSSH setup. DGX Spark hardware acceptance, native installer testing and independent security review are still pending.
+> **Development preview — not production-validated.** SparkTwin is a working analytical planner, not an NVIDIA-certified product, deployment guarantee, or performance simulator validated on a representative hardware fleet. Its memory calculations are **estimates**, not measured consumption. Model throughput appears only when user-provided benchmark evidence supports a conservative interpolation. Released installers are **unsigned previews**; clean-machine acceptance, DGX Spark field testing, and independent security review remain open.
+
+---
+
+## Why SparkTwin exists
+
+Deploying an LLM on a unified-memory machine involves more than counting parameters. **Weights, quantization overhead, attention geometry, context length, concurrent sequences, KV cache, runtime allocations, operating-system reservations and headroom** all contribute to whether a configuration is plausible.
+
+SparkTwin makes that budget explicit and editable. It is designed for AI engineers, research labs, enterprise private-AI teams, and anyone comparing inference configurations before deployment.
+
+<table>
+<tr>
+<td width="33%" valign="top"><strong>PLAN</strong><br/>Transparent, device-aware first-order memory estimates.</td>
+<td width="33%" valign="top"><strong>COMPARE</strong><br/>Explore context, precision, model geometry, and concurrency trade-offs.</td>
+<td width="34%" valign="top"><strong>PROVE</strong><br/>Preserve observations and export evidence-labeled PDF reports.</td>
+</tr>
+</table>
 
 ## Download and install
 
-**No Python installation is needed for these prepackaged desktop apps.** Open [**GitHub Releases → SparkTwin preview installers**](https://github.com/hossain0707/SparkTwin/releases), select the newest preview and download the file matching your operating system under **Assets**.
+**The easiest way to start:** Download the installer for your operating system, launch SparkTwin, and begin planning immediately. **Python is not required for the prepackaged desktop versions.** A DGX Spark is optional for offline model planning.
 
-| Platform | Recommended download | What to do next |
-| --- | --- | --- |
-| **Windows 10/11 (x64)** | `SparkTwin-Setup-Windows-x64.exe` | Double-click setup; launch SparkTwin from the Start Menu. |
-| **Mac (Apple Silicon M1–M-series)** | `SparkTwin-macOS-Apple-Silicon-unsigned.dmg` | Open DMG → drag SparkTwin into Applications. |
-| **Mac (Intel)** | `SparkTwin-macOS-Intel-unsigned.dmg` | Open DMG → drag SparkTwin into Applications. |
-| **Ubuntu 24.04 (x64)** | `SparkTwin-Linux-Ubuntu-x64.deb` | Install via software installer or `sudo apt install ./<filename>.deb`. |
+<div align="center">
 
-Windows and Linux portable ZIP/TAR.GZ packages are offered as alternatives. Every release includes **SHA-256 checksums**. **These binaries are unsigned developer previews**; operating-system security prompts may appear and clean-machine acceptance is still pending. Do not disable system security protections to install them. More details: [step-by-step installation guide](docs/INSTALL.md) and [release limitations](docs/RELEASE.md).
+**[Open the verified preview release →](https://github.com/hossain0707/SparkTwin/releases/tag/v0.1.0-preview.7)**
 
-### After installation
+</div>
 
-Open the SparkTwin app, set your model size, quantization, context window and concurrent sessions, and compare estimated memory requirements. You can save scenarios and produce PDF evidence even **without a DGX Spark**. If you want SSH read-only inspection, bring an already-working SSH configuration and verified host key.
+| Your computer | Installer | Installation |
+| :--- | :--- | :--- |
+| **Windows 10/11 — x64** | [Download Setup EXE](https://github.com/hossain0707/SparkTwin/releases/download/v0.1.0-preview.7/SparkTwin-Setup-Windows-x64.exe) | Run the setup wizard; launch from Start Menu |
+| **macOS — Apple Silicon** | [Download Apple Silicon DMG](https://github.com/hossain0707/SparkTwin/releases/download/v0.1.0-preview.7/SparkTwin-macOS-Apple-Silicon-unsigned.dmg) | Open the DMG; drag app into Applications |
+| **macOS — Intel** | [Download Intel DMG](https://github.com/hossain0707/SparkTwin/releases/download/v0.1.0-preview.7/SparkTwin-macOS-Intel-unsigned.dmg) | Open the DMG; drag app into Applications |
+| **Ubuntu Linux 24.04 — x64** | [Download DEB](https://github.com/hossain0707/SparkTwin/releases/download/v0.1.0-preview.7/SparkTwin-Linux-Ubuntu-x64.deb) | Install with your package manager |
+| **Windows — portable** | [Download ZIP](https://github.com/hossain0707/SparkTwin/releases/download/v0.1.0-preview.7/SparkTwin-Portable-Windows-x64.zip) | Extract the complete folder; launch SparkTwin |
+| **Linux — portable** | [Download TAR.GZ](https://github.com/hossain0707/SparkTwin/releases/download/v0.1.0-preview.7/SparkTwin-Portable-Linux-x64.tar.gz) | Extract and run with required GTK/WebKitGTK libraries |
 
-## The problem SparkTwin solves
+**Verify your download:** [SHA-256 checksums](https://github.com/hossain0707/SparkTwin/releases/download/v0.1.0-preview.7/SHA256SUMS.txt) · [Step-by-step installation](docs/INSTALL.md) · [Release details](docs/RELEASE.md)
 
-A model's parameter count alone cannot answer whether it will fit on a unified-memory inference host. We must account for **weight storage, KV cache, simultaneous sequences, model geometry, OS needs, runtime allocations and safety margins**. Performance also depends on measured serving conditions. SparkTwin makes these assumptions visible and editable rather than promising imaginary benchmarks.
+> [!CAUTION]
+> The macOS packages are not notarized and the Windows installer is not code-signed. Platform security warnings may appear. Do not weaken device security policies just to bypass a warning. The preview release is intended for evaluation; production-wide deployment is not yet recommended.
 
-## Animated product tour
+---
 
-<p align="center"><img src="docs/workflow-animated.svg" width="100%" alt="Illustrative animated SparkTwin workflow: configure a model, calculate capacity, compare scenarios, add measured benchmarks and export an evidence report" /></p>
+## Product tour
 
-*Illustrative animation of the implemented workflow. Not a recording of a real DGX Spark or measured workload. Respects reduced-motion preferences.*
+<p align="center">
+  <img src="docs/workflow-animated.svg" alt="Animated SparkTwin workflow: Configure, Estimate, Compare, Calibrate using real measurements, and Report." width="100%" />
+</p>
+
+SparkTwin guides you through five connected stages:
+
+1. **Configure:** choose DGX Spark or a custom host and describe the model, quantization, context window, and concurrency.
+2. **Estimate:** inspect weights, KV-cache allocation, runtime/OS reserves, a configured safety margin, and remaining headroom.
+3. **Compare:** save scenarios and examine how configuration changes affect the analytical memory budget.
+4. **Calibrate:** import **real, attributable** benchmark observations when available; refuse unsupported performance predictions.
+5. **Report:** create PDF evidence with inputs, scope, limitations, and recorded provenance.
+
+*The animated illustration shows the product flow, not a real DGX Spark benchmark or captured application session. Animation includes reduced-motion fallback.*
+
+### Planning cockpit
+
+<p align="center">
+  <img src="docs/planning-cockpit.svg" alt="Animated illustration of the SparkTwin planning interface, showing editable model options, relative memory component bars, local workspace, and evidence policy." width="100%" />
+</p>
+
+<sub>Illustrative interface design study. It is **not a screenshot** or real hardware telemetry. The application determines actual numerical estimates from the user's configured inputs.</sub>
+
+---
+
+## Capabilities
+
+| Area | Included in the current development preview | Boundary |
+| :--- | :--- | :--- |
+| **Unified-memory planning** | Device profiles, editable memory budget, reserves and headroom | Analytical model; not a physical GPU memory allocator |
+| **Model geometry** | Parameters, precision, transformer layer/head geometry, KV-cache settings | Requires correct architecture assumptions |
+| **Scenario comparison** | Editable what-if variants, persistent scenarios, save/reopen/delete, workspace export | Comparative memory estimate, not measured tokens/sec |
+| **Benchmark lab** | Validated user CSV/JSON imports, provenance fields, conservative interpolation | No synthetic observations presented as measured evidence |
+| **Remote inspection** | Optional OpenSSH host aliases, read-only Linux memory and GPU identity | Requires verified host key and working key-based SSH |
+| **Reports** | Evidence-labeled PDFs, assumptions and scope, local SQLite history | Not a regulatory or third-party certification |
+| **Desktop access** | Native preview builds for Windows, Intel/Apple Silicon macOS, Ubuntu x64 | Builds verified in CI; unsigned and not field-accepted |
+| **Local security** | Loopback binding, session-token checks, Origin/Host validation, CSP | Security review is not a completed penetration test |
+
+### What SparkTwin deliberately does *not* claim
+
+- **No guaranteed model fit.** True deployment depends on framework implementation, kernel allocations, memory fragmentation and runtime behavior.
+- **No unmeasured throughput.** GPU memory or advertised bandwidth alone cannot reliably determine tokens per second.
+- **No mandatory cloud account.** Planning works locally; data is stored on the operator's machine.
+- **No automatic GPU deployment.** Optional SSH inspection is read-only and does not install a remote service.
+- **No NVIDIA affiliation.** SparkTwin is independent tooling designed to complement, not replace, vendor management products.
 
 ## Architecture
 
-<p align="center"><img src="docs/architecture.svg" width="100%" alt="SparkTwin local browser or optional native window connecting to a protected loopback Python service, memory model, SQLite, PDF reporting, and optional read-only OpenSSH diagnostics" /></p>
+<p align="center">
+  <img src="docs/architecture.svg" width="100%" alt="Animated SparkTwin system architecture showing a local-only protected controller, memory engine, SQLite evidence store, PDF generator, and optional read-only OpenSSH access to a DGX Spark or Linux host." />
+</p>
 
-The application runs **on the operator's computer**, so a DGX Spark is **not required** to explore scenarios. The protected local web controller evaluates mathematical models, manages a local SQLite workspace and generates PDF evidence. Optional SSH inspection uses `~/.ssh/config`, already trusted `known_hosts`, a key/agent and predefined read-only commands to collect Linux memory and GPU identity. **There is no always-running agent installed on the Spark, no cloud backend and no remote model deployment.**
+**The application runs locally.** A responsive browser UI or optional packaged desktop window communicates with a loopback-bound Python controller. The capacity engine performs deterministic calculations, SQLite stores scenarios and uploaded benchmark observations, and the PDF component prepares the evidence report. An already configured OpenSSH client may optionally inspect a reachable Linux host. **There is no required remote agent or hosted backend.**
 
-See [editable architecture notes](docs/ARCHITECTURE.md) and [security boundaries](docs/SECURITY.md).
+<details>
+<summary><strong>View the editable system diagram</strong></summary>
 
-## Features
+~~~mermaid
+flowchart LR
+    U[Windows / macOS / Linux user] --> UI[Local web UI or desktop shell]
+    UI --> API[Loopback API and session controls]
+    API --> M[Deterministic memory engine]
+    API --> B[Benchmark calibration]
+    API --> DB[(Local SQLite)]
+    API --> R[PDF evidence reports]
+    API -. Verified OpenSSH; read only .-> H[DGX Spark or Linux host]
+    B --> DB
+    M --> R
+    DB --> R
+~~~
 
-| Module | What works now | Scope / limitation |
-| --- | --- | --- |
-| Professional responsive dashboard | Animated dark UI with custom charts and guided navigation | Not a live device telemetry dashboard |
-| Device profiles | DGX Spark 128 GB and editable custom unified-memory host | Vendor GB converted to binary GiB |
-| Memory engine | Model weight size, KV cache, concurrent sequences, reserves and margin | Does not simulate operator kernels, paging or fabric traffic |
-| Quantization trade-offs | 2–32 bit weights; configurable KV element bytes and packing overhead | User must verify real runtime compatibility |
-| Scenario planning | Live parameter editing, heuristics and four what-if variants | Comparison is analytical, not observed speed |
-| Persistent scenarios | Save, reopen, delete, compare, export and restore | Local SQLite database |
-| Benchmark lab | Import user-supplied JSON/CSV observations and retain provenance | No vendor benchmarks fabricated |
-| Conservative calibration | Same-profile/precision nearby-scenario interpolation | At least two matching measurements; cautious confidence |
-| Remote SSH inspect | Import aliases and collect Linux memory, OS and GPU identity | Requires working verified key-based SSH; never installs an agent |
-| Professional reports | Download evidence-labeled PDF assessments and workspace backups | Not regulatory or official certification |
-| Windows/macOS/Linux desktop | Cross-platform Python launch and optional pywebview shell | Native unsigned build workflow; platform validation pending |
-| Security controls | Loopback-only bind, per-session token, Origin and Host checks, CSP | Not independently penetration-tested |
+</details>
 
-## Get started
+More detail: [Architecture and data flow](docs/ARCHITECTURE.md) · [Security model](docs/SECURITY.md) · [Visual design system](docs/DESIGN_SYSTEM.md)
 
-The simplest **tested** approach is the Python application; no DGX Spark or cloud account is required. Install **Python 3.11 or newer** and run the following from the repository folder.
+---
 
-**Windows — PowerShell**
+## Calculation methodology
 
-```powershell
+SparkTwin uses an explicit **first-order memory accounting model**. It never assumes a particular model checkpoint or serving backend is perfectly described by parameter count alone.
+
+| Component | Principle |
+| :--- | :--- |
+| **Weights** | Parameter count × bits per weight × configurable packing overhead |
+| **KV cache** | 2 × layers × KV heads × head dimension × element bytes × retained tokens × concurrent sequences |
+| **Additional allocations** | Runtime, activations, operating system, and safety reserve |
+| **Headroom** | Available device memory − modeled total allocation |
+
+For a nominal **128 GB** unified-memory profile, the application converts vendor decimal GB into binary GiB rather than treating the two units as equal. Context length, grouped-query attention configuration, precision, and simultaneous requests can materially change the answer.
+
+**Calibration is evidence-gated:** output-token throughput interpolation requires at least two sufficiently nearby, matching benchmark observations; unsupported or distant scenarios should not receive an invented performance number. The detailed formulas and constraints are documented in [CALCULATIONS.md](docs/CALCULATIONS.md).
+
+## Quick start from source
+
+Use the desktop installers above for ordinary evaluation. Developers can instead run the Python version on Windows, macOS, or Linux using **Python 3.11+**.
+
+<details>
+<summary><strong>Windows — PowerShell</strong></summary>
+
+~~~powershell
+git clone https://github.com/hossain0707/SparkTwin.git
+cd SparkTwin
 py -3 -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -e .
 .\.venv\Scripts\python.exe -m sparktwin
-```
+~~~
 
-**macOS / Linux — terminal**
+</details>
 
-```bash
+<details>
+<summary><strong>macOS / Linux</strong></summary>
+
+~~~bash
+git clone https://github.com/hossain0707/SparkTwin.git
+cd SparkTwin
 python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install -e .
 python -m sparktwin
-```
+~~~
 
-SparkTwin opens a browser on `http://127.0.0.1:<random-port>` and stores scenarios in `~/.sparktwin/sparktwin.sqlite3`. The first Python package installation requires access to PyPI; **normal model planning does not contact an external service**.
+</details>
 
-**Optional native desktop window:**
+A free local port on `127.0.0.1` is used; the private workspace resides under `~/.sparktwin/`. Installing Python dependencies initially requires network access to the package index, but normal scenario modeling requires no cloud connection.
 
-```bash
-python -m pip install -e '.[desktop]'
-python desktop_launcher.py
-```
+Optional native window: install `python -m pip install -e '.[desktop]'`, then run `python desktop_launcher.py`.
 
-## Build status and supported environments
+### Development and testing
 
-Windows EXE installation, macOS DMGs and Ubuntu DEB packages are built in GitHub Actions and attached to versioned, **unsigned** [GitHub Releases](https://github.com/hossain0707/SparkTwin/releases) only after the entire test/build workflow succeeds. These packages are development previews, **not** signed stable releases. Detailed build and installation instructions: [docs/RELEASE.md](docs/RELEASE.md) and [docs/INSTALL.md](docs/INSTALL.md).
+~~~bash
+python -m pip install -e '.[dev]'
+python -m pytest -q
+node --check sparktwin/web/app.js
+python desktop_launcher.py --self-test
+~~~
 
-## Quick scenario example
+GitHub Actions runs a cross-platform test/build matrix and publishes **versioned unsigned developer previews** only after the relevant workflow passes. See the [CI workflow](.github/workflows/ci.yml), [release checklist](docs/RELEASE.md), and [verification ledger](docs/VERIFICATION.md).
 
-Choose the illustrative generic 8B model, 4-bit weights, 32 layers, 8 KV heads, FP16 KV cache, 8192 tokens and four concurrent sequences. The application computes a first-order memory demand and budget breakdown. Those numbers are **scenario assumptions**, not a benchmark of a particular checkpoint. Change any setting and observe the impact instantly.
+---
 
-### Memory accounting
+## Project maturity
 
-```text
-Weights (GiB) = parameters × 1e9 × weight_bits / 8 × packing_multiplier / 2^30
-KV cache (GiB) = 2 × layers × kv_heads × head_dim × kv_bytes
-                 × tokens × concurrent_sequences × utilization / 2^30
-Total (GiB) = weights + KV + OS + runtime + activations + safety_margin
-Headroom (GiB) = decimal_hardware_GB × 1e9 / 2^30 − Total
-```
+| Verification area | Current status |
+| :--- | :--- |
+| Local application and modeling features | **Implemented in development MVP** |
+| Local Python automated tests | **39 passed** in recorded local validation |
+| Windows, macOS and Linux build matrix | **CI build verified** for the tagged preview |
+| Tagged downloadable preview installers | **Published and verified** as release assets |
+| Clean-machine installer acceptance | **Pending** |
+| Physical DGX Spark inspection and performance validation | **Pending** |
+| Independent security review, code signing, macOS notarization | **Pending** |
 
-NVIDIA documents DGX Spark's unified memory and 273 GB/s nominal bandwidth in its [Hardware Overview](https://docs.nvidia.com/dgx/dgx-spark/hardware.html). **Memory bandwidth does not establish application tokens/sec.** Refer to [modeling contract](docs/CALCULATIONS.md).
+Do not treat the CI badge or release assets as proof of production acceptance. [Detailed validation evidence](docs/VERIFICATION.md) and [the roadmap](docs/PRODUCT_ROADMAP.md) document what remains.
 
-## Working with measured evidence
+## Documentation and project continuity
 
-SparkTwin will *not* invent performance. Import your own CSV/JSON benchmark observations with `device`, `params_b`, `weight_bits`, `context_tokens`, `concurrency`, `output_tokens_per_second`, and `source`. It needs **at least two sufficiently close** measurements on the same device profile and precision before showing a bounded interpolated estimate. This interpolated number remains **an estimate based on user claims**, not a fresh GPU run.
+| Read this | To understand |
+| :--- | :--- |
+| **[START_HERE.md](START_HERE.md)** | Resume development from another computer, agent, or workspace |
+| [AGENTS.md](AGENTS.md) | Engineering constraints, repository map and decision-making rules |
+| [ARCHITECTURE.md](docs/ARCHITECTURE.md) | Components, architecture, trust boundaries and data flows |
+| [CALCULATIONS.md](docs/CALCULATIONS.md) | Equations, hardware assumptions and model limitations |
+| [SECURITY.md](docs/SECURITY.md) | Local and optional SSH security model |
+| [VERIFICATION.md](docs/VERIFICATION.md) | Evidence, test coverage and production-release gates |
+| [PRODUCT_ROADMAP.md](docs/PRODUCT_ROADMAP.md) | Planned engineering milestones |
+| [RELEASE.md](docs/RELEASE.md) | Packaging and acceptance requirements |
+| [INSTALL.md](docs/INSTALL.md) | OS-specific download and installation guide |
+| [DESIGN_SYSTEM.md](docs/DESIGN_SYSTEM.md) | Visual design, animation and accessibility guidance |
 
-Use **Benchmark lab → CSV template** to start. Imports are validated, bounded and stored only on your machine. PDF exports label assumptions, estimated values and observation provenance.
+## Creator, rights and disclosure
 
-## Project status and continuation
+**Created and maintained by Md Najmul Hossain** · © 2026.
 
-**Local verification:** 39 Python tests passing; JavaScript syntax and packaged-source asset checks passing. Browser acceptance, actual DGX Spark SSH operation, clean-machine installer checks, and signed desktop installers remain unverified.
+See [LICENSE-NOTICE.md](LICENSE-NOTICE.md) for current distribution and reuse terms. A public repository does **not** automatically grant an open-source software license.
 
-| Where to go | Content |
-| --- | --- |
-| [START_HERE.md](START_HERE.md) | Continue from a new computer, workspace or AI coding agent |
-| [AGENTS.md](AGENTS.md) | Engineering constraints, code map and next actions |
-| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Data flow and trust boundaries |
-| [docs/CALCULATIONS.md](docs/CALCULATIONS.md) | Mathematical equations and assumptions |
-| [docs/VERIFICATION.md](docs/VERIFICATION.md) | Tests, known gaps and verification plan |
-| [docs/PRODUCT_ROADMAP.md](docs/PRODUCT_ROADMAP.md) | Feature and production milestone roadmap |
-| [docs/RELEASE.md](docs/RELEASE.md) | Cross-platform distribution and sign-off plan |
-| [docs/REPOSITORY_PROFILE.md](docs/REPOSITORY_PROFILE.md) | Suggested GitHub About description and searchable topics |
+SparkTwin is independent of and not sponsored, affiliated with, or endorsed by NVIDIA Corporation. NVIDIA, DGX, DGX Spark and other trademarks belong to their respective owners.
 
-## Creator and licensing
+<div align="center">
 
-**Md Najmul Hossain** · 2026. See [LICENSE-NOTICE.md](LICENSE-NOTICE.md) for current rights. SparkTwin is an independent, unofficial project and is **not affiliated with or endorsed by NVIDIA**. NVIDIA, DGX and DGX Spark are trademarks of their respective owners.
+**Plan with clarity. Compare with context. Validate with evidence.**
+
+[Download a preview](https://github.com/hossain0707/SparkTwin/releases/tag/v0.1.0-preview.7) · [Open the development handover](START_HERE.md) · [View known limitations](docs/VERIFICATION.md)
+
+</div>
