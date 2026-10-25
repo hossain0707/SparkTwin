@@ -47,10 +47,12 @@ function renderEstimate(r){
  let cursor=0;const stops=[];for(const [,gib,color] of comps){let end=Math.min(100,cursor+(gib/total*100));stops.push(`${color} ${cursor.toFixed(3)}% ${end.toFixed(3)}%`);cursor=end}if(cursor<100)stops.push(`#244356 ${cursor.toFixed(3)}% 100%`);
  $('memory-donut').style.background=`conic-gradient(${stops.join(',')})`;
  $('donut-percent').textContent=fmt(percent,0)+'%';$('memory-donut').setAttribute('aria-label',`Model estimated ${fmt(r.total_gib)} GiB against ${fmt(total)} GiB physical memory`);
- $('memory-legend').innerHTML=comps.map(([name,value,color])=>`<div class="legend-row"><span class="legend-name"><span class="legend-swatch" style="background:${color}"></span>${esc(name)}</span><strong>${fmt(value)} GiB</strong></div>`).join('');
+ $('memory-legend').innerHTML=comps.map(([name,value])=>`<div class="legend-row"><span class="legend-name"><span class="legend-swatch"></span>${esc(name)}</span><strong>${fmt(value)} GiB</strong></div>`).join('');
+ [...$('memory-legend').querySelectorAll('.legend-swatch')].forEach((node,i)=>{node.style.backgroundColor=comps[i][2]});
  $('result-name').textContent=r.scenario.name;$('result-verdict').textContent=verdict;$('result-verdict').className='pill'+(r.status==='tight'?' warn':r.status==='exceeds'?' bad':'');
  $('total-memory').textContent=fmt(r.total_gib);
- $('memory-segments').innerHTML=comps.map(([,v,color])=>`<div title="${fmt(v)} GiB" style="flex-basis:${roundPercent(v/total*100,100)}%;background:${color}"></div>`).join('');
+ $('memory-segments').innerHTML=comps.map(([,v])=>`<div title="${fmt(v)} GiB"></div>`).join('');
+ [...$('memory-segments').children].forEach((node,i)=>{node.style.flexBasis=roundPercent(comps[i][1]/total*100,100)+'%';node.style.backgroundColor=comps[i][2]});
  const details=[['Physical capacity',fmt(total)+' GiB'],['Memory headroom',fmt(r.headroom_gib)+' GiB'],['Memory-only sequence bound',String(r.upper_bound_sessions)],['Model storage estimate',fmt(r.weights_gib)+' GiB']];
  $('result-detail').innerHTML=details.map(([k,v])=>`<div class="detail-item"><label>${esc(k)}</label><strong>${esc(v)}</strong></div>`).join('');
  $('result-explanation').textContent=r.description+' The memory-only sequence bound is not a service throughput or concurrency guarantee.';
