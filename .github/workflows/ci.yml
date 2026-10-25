@@ -1,4 +1,4 @@
-name: Test and build SparkTwin
+name: SparkTwin — Test, Package, Publish Preview
 
 on:
   push:
@@ -12,106 +12,152 @@ permissions:
 
 jobs:
   test:
+    name: Test (${{ matrix.os }}, Python ${{ matrix.python }})
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-24.04, windows-latest, macos-latest]
+        os: [ubuntu-24.04, windows-2022, macos-15-intel]
         python: ['3.11', '3.12', '3.13']
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 15
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python }}
-      - name: Install app and tests
+          cache: pip
+      - name: Install application and test dependencies
         run: python -m pip install -e ".[dev]"
-      - name: Run test suite
+      - name: Run automated tests
         run: python -m pytest -q
-      - name: Validate browser JavaScript
+      - name: Check JavaScript syntax
         run: node --check sparktwin/web/app.js
-      - name: Verify native app asset layout
+      - name: Validate desktop source assets
         run: python desktop_launcher.py --self-test
 
   desktop-build:
+    name: Package (${{ matrix.id }})
     needs: test
     strategy:
       fail-fast: false
       matrix:
         include:
-          - os: windows-latest
-            label: Windows-x64
-            separator: ";"
-          - os: macos-15-intel
-            label: macOS-Intel
-            separator: ":"
-          - os: macos-latest
-            label: macOS-Apple-Silicon
-            separator: ":"
-          - os: ubuntu-24.04
-            label: Linux-x64
-            separator: ":"
+          - { id: windows-x64, os: windows-2022, platform: windows }
+          - { id: macos-intel, os: macos-15-intel, platform: macos }
+          - { id: macos-arm64, os: macos-15, platform: macos }
+          - { id: linux-x64, os: ubuntu-24.04, platform: linux }
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 40
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Linux webview prerequisites
+          cache: pip
+      - name: Install Linux GUI requirements
         if: runner.os == 'Linux'
-        run: sudo apt-get update && sudo apt-get install -y libgtk-3-0 libwebkit2gtk-4.1-0 libgirepository-2.0-0 dpkg-dev
+        run: |
+          sudo apt-get update -q
+          sudo apt-get install -y libgtk-3-0 libwebkit2gtk-4.1-0 libgirepository-2.0-0 dpkg-dev
       - name: Install packaging dependencies
         run: python -m pip install -e ".[build]"
-      - name: Build standalone desktop app
-        run: >-
-          pyinstaller --noconfirm --clean --onedir --windowed --name SparkTwin
-          --add-data "sparktwin/web${{ matrix.separator }}sparktwin/web"
-          --collect-all webview
-          desktop_launcher.py
-      - name: Linux packaged asset and Python integrity
-        if: runner.os == 'Linux'
-        run: ./dist/SparkTwin/SparkTwin --self-test
-      - name: macOS packaged asset and Python integrity
-        if: runner.os == 'macOS'
-        run: ./dist/SparkTwin.app/Contents/MacOS/SparkTwin --self-test
-      - name: Windows packaged asset and Python integrity
+      - name: Build standalone SparkTwin app
+        shell: bash
+        run: |
+          python -m PyInstaller --noconfirm --clean --onedir --windowed \
+            --name SparkTwin --add-data 'sparktwin/web:sparktwin/web' \
+            --collect-all webview desktop_launcher.py
+      - name: Verify Windows packaged binary
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
-          $process = Start-Process -FilePath ".\\dist\\SparkTwin\\SparkTwin.exe" -ArgumentList "--self-test" -Wait -PassThru
-          Write-Host "SparkTwin packaged self-test exit code: $($process.ExitCode)"
-          if ($process.ExitCode -ne 0) { throw "Windows packaged self-test failed" }
-      - name: Windows portable ZIP
+          $process = Start-Process -FilePath (Resolve-Path 'dist/SparkTwin/SparkTwin.exe').Path -ArgumentList '--self-test' -Wait -PassThru
+          if ($process.ExitCode -ne 0) { throw "Windows packaged self-test failed: $($process.ExitCode)" }
+      - name: Verify Unix packaged binary
+        if: runner.os != 'Windows'
+        shell: bash
+        run: |
+          if [ '${{ runner.os }}' = macOS ]; then
+            ./dist/SparkTwin.app/Contents/MacOS/SparkTwin --self-test
+          else
+            ./dist/SparkTwin/SparkTwin --self-test
+          fi
+      - name: Create Windows setup installer and portable ZIP
         if: runner.os == 'Windows'
         shell: pwsh
-        run: Compress-Archive -Path dist\SparkTwin -DestinationPath SparkTwin-Windows-x64-portable.zip
-      - name: macOS unsigned DMG
+        run: |
+          New-Item -ItemType Directory -Force dist/release | Out-Null
+          Compress-Archive -Path dist/SparkTwin -DestinationPath dist/release/SparkTwin-Portable-Windows-x64.zip -CompressionLevel Optimal
+          choco install innosetup --yes --no-progress
+          if ($LASTEXITCODE -ne 0) { throw 'Failed to install Inno Setup' }
+          & "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe" 'installer/SparkTwin.iss'
+          if ($LASTEXITCODE -ne 0) { throw 'Inno Setup compilation failed' }
+      - name: Create drag-to-Applications macOS DMG
         if: runner.os == 'macOS'
-        run: hdiutil create -volname SparkTwin -srcfolder dist/SparkTwin.app -ov -format UDZO SparkTwin-${{ matrix.label }}-unsigned.dmg
-      - name: Linux portable archive and DEB
+        shell: bash
+        run: |
+          mkdir -p dist/release dist/dmg-stage
+          cp -R dist/SparkTwin.app dist/dmg-stage/
+          ln -s /Applications dist/dmg-stage/Applications
+          if [ '${{ matrix.id }}' = macos-arm64 ]; then label=Apple-Silicon; else label=Intel; fi
+          hdiutil create -volname 'SparkTwin Preview' -srcfolder dist/dmg-stage -ov -format UDZO "dist/release/SparkTwin-macOS-${label}-unsigned.dmg"
+      - name: Create Ubuntu DEB and Linux portable archive
         if: runner.os == 'Linux'
         shell: bash
         run: |
-          tar -czf SparkTwin-Linux-x64-portable.tar.gz -C dist SparkTwin
+          mkdir -p dist/release
+          tar -czf dist/release/SparkTwin-Portable-Linux-x64.tar.gz -C dist SparkTwin
           bash scripts/package_deb.sh
-      - uses: actions/upload-artifact@v4
-        if: runner.os == 'Windows'
+          mv SparkTwin-Linux-x64-preview.deb dist/release/SparkTwin-Linux-Ubuntu-x64.deb
+      - name: Upload distribution files
+        uses: actions/upload-artifact@v4
         with:
-          name: SparkTwin-Windows-x64-preview
-          path: SparkTwin-Windows-x64-portable.zip
+          name: SparkTwin-distribution-${{ matrix.id }}
+          path: dist/release/*
+          if-no-files-found: error
           retention-days: 30
-      - uses: actions/upload-artifact@v4
-        if: runner.os == 'macOS'
+
+  preview-release:
+    name: Publish tagged unsigned preview release
+    needs: [test, desktop-build]
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
         with:
-          name: SparkTwin-${{ matrix.label }}-preview
-          path: SparkTwin-${{ matrix.label }}-unsigned.dmg
-          retention-days: 30
-      - uses: actions/upload-artifact@v4
-        if: runner.os == 'Linux'
-        with:
-          name: SparkTwin-Linux-x64-preview
-          path: |
-            SparkTwin-Linux-x64-portable.tar.gz
-            SparkTwin-Linux-x64-preview.deb
-          retention-days: 30
+          pattern: SparkTwin-distribution-*
+          path: release-assets
+          merge-multiple: true
+      - name: Verify every platform and generate SHA-256 checksums
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd release-assets
+          for filename in \
+            SparkTwin-Setup-Windows-x64.exe \
+            SparkTwin-Portable-Windows-x64.zip \
+            SparkTwin-macOS-Apple-Silicon-unsigned.dmg \
+            SparkTwin-macOS-Intel-unsigned.dmg \
+            SparkTwin-Linux-Ubuntu-x64.deb \
+            SparkTwin-Portable-Linux-x64.tar.gz; do
+            test -s "$filename" || { echo "Missing or empty release asset: $filename"; exit 1; }
+          done
+          sha256sum SparkTwin-* > SHA256SUMS.txt
+          ls -lh
+      - name: Create immutable pre-release tag with downloadable installers
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          tag="v0.1.0-preview.${GITHUB_RUN_NUMBER}"
+          gh release create "$tag" release-assets/* \
+            --repo "$GITHUB_REPOSITORY" \
+            --target "$GITHUB_SHA" \
+            --prerelease \
+            --title "SparkTwin v0.1.0 · Unsigned Preview #${GITHUB_RUN_NUMBER}" \
+            --notes-file docs/PREVIEW_RELEASE_NOTES.md

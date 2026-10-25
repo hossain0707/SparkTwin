@@ -1,34 +1,39 @@
-# Installation, packaging and production-release gates
+# SparkTwin cross-platform desktop release pipeline
 
-## Supported source install
+## GitHub releases — one-click downloads
 
-Requirements: Python 3.11+, internet for initial reportlab dependency download, browser. Optional SSH commands require a system OpenSSH client and working SSH credentials. Source quick-start commands are in README.
+The distribution workflow `.github/workflows/ci.yml` runs on pushes to `main`. Its testing matrix covers Python 3.11–3.13 on Windows, macOS and Ubuntu. After tests pass, platform builders package a self-contained native app, run `desktop_launcher.py --self-test` on each packaged executable, and upload distribution artifacts.
 
-## GitHub Actions: unsigned development packages
+The `preview-release` job runs only for `main`, downloads platform artifacts, verifies **all six** expected packages are nonempty, produces a `SHA256SUMS.txt`, and creates an **immutable prerelease tag** of the form `v0.1.0-preview.<GitHub Actions run number>` with the assets and `docs/PREVIEW_RELEASE_NOTES.md`. That GitHub Release is the user-friendly download location; Actions artifacts remain temporary.
 
-The workflow `.github/workflows/ci.yml` runs Python tests on Windows, Ubuntu and macOS with Python 3.11/3.12/3.13. Build jobs then package the optional webview desktop launcher with PyInstaller and upload **unsigned preview artifacts** to GitHub Actions:
+### Installer output matrix
 
-- Windows x64: ZIP with the executable and runtime files.
-- macOS Intel and Apple Silicon: unsigned DMG containing `.app`.
-- Ubuntu x64: DEB and portable TAR.GZ. Linux requires WebKitGTK/GTK system libraries.
+| OS | Format | Notes |
+| --- | --- | --- |
+| Windows x64 | `SparkTwin-Setup-Windows-x64.exe` | Per-user Inno Setup installer, Start Menu entry, optional desktop icon, uninstaller. Unsigned. |
+| Windows x64 | `SparkTwin-Portable-Windows-x64.zip` | Extract whole folder, launch EXE. |
+| macOS Apple Silicon | `SparkTwin-macOS-Apple-Silicon-unsigned.dmg` | Drag the app into Applications. Unsigned and not notarized. |
+| macOS Intel | `SparkTwin-macOS-Intel-unsigned.dmg` | Drag the app into Applications. Unsigned and not notarized. |
+| Ubuntu Linux x64 | `SparkTwin-Linux-Ubuntu-x64.deb` | DEB installation using system GTK / WebKit dependencies. |
+| Linux x64 | `SparkTwin-Portable-Linux-x64.tar.gz` | Extract portable folder with GUI dependencies available. |
 
-These are **targets**, not verified releases until the actual workflows succeed and packages are installed on clean machines. PyInstaller packaging includes the frontend under `sparktwin/web`. `desktop_launcher.py --self-test` checks included assets before app distribution.
+Detailed user onboarding: [INSTALL.md](INSTALL.md). Published notes: [PREVIEW_RELEASE_NOTES.md](PREVIEW_RELEASE_NOTES.md).
 
-## Signed release sign-off checklist
+## Constraints
 
-1. All CI OS builds green, dependencies audited, checksum generated and provenance retained.
-2. Test ordinary installation, first launch, local access and update/uninstall on clean physical/virtual machines for all supported targets.
-3. Test network and SSH alias diagnostics using actual DGX Spark with independently checked host key.
-4. Run representative real model experiments and validate estimator confidence; no unverified throughput claims.
-5. Penetration test local API/IPC, file import, input validation and native app packaging.
-6. Windows code signing (appropriate identity) and macOS Developer ID notarization, or clearly label unsigned previews without asserting bypass safety.
-7. User-readable release notes, accessible onboarding, checksum verification, security disclosure and rollback plan.
+- The binaries are **developer previews**, not signed stable releases. Successful CI means packages built and packaged smoke checks passed; it does not prove clean installation, functional GUI correctness or DGX Spark hardware compatibility.
+- Do not market memory/throughput estimates as measured or guaranteed. Benchmarks are only imported and calibrated from user-supplied evidence.
+- Releases are tagged from GitHub Actions using `GITHUB_TOKEN` scoped to `contents: write` only in the publish job. PRs cannot create releases. Tags are never force-updated or overwritten.
+- Commit updates to `main` create a **new** numbered preview release; this preserves reproducibility at the cost of release clutter. Settle a version/release process before general availability.
+- SHA256SUMS.txt is generated from exact release assets; verify downloads against it.
 
-## Developer package procedure
+## Pending stable-release checklist
 
-`python -m pip install -e '.[build,dev]'`; `python -m pytest -q`; `pyinstaller --onedir --windowed --name SparkTwin --add-data "sparktwin/web:sparktwin/web" --collect-all webview desktop_launcher.py` (use semicolon instead of colon on Windows). Run packaged binary with `--self-test`.
+1. Windows code signing and macOS Developer ID signing/notarization, and publisher verification.
+2. Clean-machine install / first-launch / uninstall tests, including Windows Defender and macOS Gatekeeper outcomes, on each advertised target.
+3. Actual DGX Spark SSH tests using verified host fingerprints over LAN/Ethernet/VPN.
+4. Independent security review of all local API and import surfaces and provenance hardening of the release workflow.
+5. Correlate analytical memory estimates with physical inference measurements, document any discrepancies and limitations.
+6. Accessible GUI acceptance on real OS desktops, formal release notes and tested upgrade/rollback procedures.
 
-## Preview artifact availability — 2026-10-25
-
-**Verified cross-platform CI:** On 2026-10-25, [workflow run 40151668581](https://github.com/hossain0707/SparkTwin/actions/runs/40151668581) completed **13/13 jobs successfully**, including 9 OS/Python test combinations and all four packaged targets. Downloadable unsigned preview artifacts were published for Windows x64, macOS Apple Silicon, macOS Intel and Ubuntu x64. This is build verification, **not** clean-machine installation, real DGX Spark hardware acceptance or code signing.
-
+**Never claim the software is a certified NVIDIA product or a production-tested simulator before these gates close.**

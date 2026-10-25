@@ -33,10 +33,6 @@
 
 **Never describe** analytic memory-fit heuristics as validated deployability, bandwidth ceiling as tokens/sec, or a user-entered throughput record as a measured SparkTwin result.
 
-## Latest build evidence
-
-**Verified cross-platform CI:** On 2026-10-25, [workflow run 40151668581](https://github.com/hossain0707/SparkTwin/actions/runs/40151668581) completed **13/13 jobs successfully**, including 9 OS/Python test combinations and all four packaged targets. Downloadable unsigned preview artifacts were published for Windows x64, macOS Apple Silicon, macOS Intel and Ubuntu x64. This is build verification, **not** clean-machine installation, real DGX Spark hardware acceptance or code signing.
-
 ## Highest-priority remaining work
 
 1. Run CI on GitHub and examine every OS matrix result. Address pywebview/backend bundling failures, including Linux WebKitGTK, without hiding them.
@@ -59,3 +55,12 @@
 ## Suggested continuation prompt
 
 > Continue the existing SparkTwin repository. Read START_HERE.md, AGENTS.md and all linked architecture, methodology, verification, security and release documents. First inspect existing files and run tests. Preserve the local-first design, avoid unsupported performance claims or invented benchmarks, and prioritize cross-platform CI, real DGX Spark SSH acceptance, browser tests and validated calibration. Update the complete README, documentation, status, changelog and tests with each change. Commit safely to this repository without exposing personal credentials or requiring paid services.
+
+## Tagged installers / distribution (2026-10-25)
+
+- Build workflow: `.github/workflows/ci.yml` (9 Python test matrix jobs, 4 cross-platform builds, 1 release job).
+- Windows per-user installer recipe: `installer/SparkTwin.iss`, built using Inno Setup in GitHub Actions.
+- macOS Intel and Apple Silicon DMG, Linux DEB and portable packages are built in the same pipeline.
+- Each successful `main` workflow run creates a GitHub prerelease tag `v0.1.0-preview.<run_number>`, a release asset checksum manifest `SHA256SUMS.txt`, and downloadable files.
+- User instructions: `docs/INSTALL.md`; reproducible packaging and remaining stable gates: `docs/RELEASE.md`; prerelease notes: `docs/PREVIEW_RELEASE_NOTES.md`.
+- Do not claim binaries or release exist until GitHub Actions and release URL are verified in the repository. All builds are unsigned; hardware and GUI acceptance remain pending.
