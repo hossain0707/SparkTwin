@@ -20,7 +20,7 @@ Compression=lzma2
 SolidCompression=yes
 WizardStyle=modern
 DisableProgramGroupPage=yes
-OutputDir=dist\release
+OutputDir=..\dist\release
 OutputBaseFilename=SparkTwin-Setup-Windows-x64
 UninstallDisplayIcon={app}\SparkTwin.exe
 
@@ -28,7 +28,7 @@ UninstallDisplayIcon={app}\SparkTwin.exe
 Name: "desktopicon"; Description: "Create a desktop shortcut"; GroupDescription: "Additional shortcuts:"; Flags: unchecked
 
 [Files]
-Source: "dist\SparkTwin\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "..\dist\SparkTwin\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 [Icons]
 Name: "{autoprograms}\SparkTwin"; Filename: "{app}\SparkTwin.exe"; WorkingDir: "{app}"
