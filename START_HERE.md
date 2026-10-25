@@ -29,13 +29,13 @@
 ## Verified / not verified
 
 **Local:** 39 pytest tests pass; JavaScript parses under Node; native app source self-test passes. Python runtime HTTP endpoints including auth, scenario CRUD and PDF have tests.  
-**Not yet verified:** physical DGX Spark SSH connectivity, Chrome UI acceptance (Chromium automation policy blocked local navigations in this environment), Windows/macOS/Linux installers on clean machines, code signing/notarization, independent pen test, real-inference benchmarking.
+**Not yet verified:** physical DGX Spark SSH connectivity, real browser click-through acceptance (Chromium automation policy blocked local navigations in the original workspace), Windows/macOS/Linux installer acceptance on clean machines, code signing/notarization, independent pen test, real-inference benchmarking.
 
 **Never describe** analytic memory-fit heuristics as validated deployability, bandwidth ceiling as tokens/sec, or a user-entered throughput record as a measured SparkTwin result.
 
 ## Highest-priority remaining work
 
-1. Run CI on GitHub and examine every OS matrix result. Address pywebview/backend bundling failures, including Linux WebKitGTK, without hiding them.
+1. CI has produced an unsigned preview release, but manually install and exercise the Windows/macOS/Linux packages on clean systems. Verify native UI startup, GTK/WebKitGTK dependencies, upgrades and uninstall behavior.
 2. Test actual source app in real browsers: desktop/mobile flows, export/import, document keyboard navigation, responsive behavior.
 3. Run read-only SSH checks on a real DGX Spark over Ethernet/LAN/VPN. Record OS/GPU info and limitations; never bypass SSH host-key verification.
 4. Gather a real benchmark matrix for exact model revisions, context, concurrency, runtime and quantization; validate calibration error and tighten the applicability rule.
@@ -64,3 +64,20 @@
 - Each successful `main` workflow run creates a GitHub prerelease tag `v0.1.0-preview.<run_number>`, a release asset checksum manifest `SHA256SUMS.txt`, and downloadable files.
 - User instructions: `docs/INSTALL.md`; reproducible packaging and remaining stable gates: `docs/RELEASE.md`; prerelease notes: `docs/PREVIEW_RELEASE_NOTES.md`.
 - Do not claim binaries or release exist until GitHub Actions and release URL are verified in the repository. All builds are unsigned; hardware and GUI acceptance remain pending.
+
+
+## README visual/documentation refresh — 2026-10-25
+
+The main README was redesigned as a product-facing landing page with verified preview-installer download links, expanded capability/limitation matrix, a clear model accounting summary, implementation-faithful architecture and an explicit production-gate matrix.
+
+Updated animated assets:
+- `docs/sparktwin-banner.svg`
+- `docs/workflow-animated.svg`
+- `docs/planning-cockpit.svg` (illustrative UI study; **not** an actual screenshot)
+- `docs/architecture.svg`
+
+The SVGs use embedded CSS animation, accessible descriptions, and reduced-motion fallbacks; no remote assets or JavaScript. Product claims must remain consistent with `docs/VERIFICATION.md` and `docs/RELEASE.md`. See `docs/DESIGN_SYSTEM.md` for the canonical presentation guidance.
+
+Verified public GitHub prerelease: `v0.1.0-preview.7` with Windows x64 Setup/portable, macOS Intel/Apple Silicon DMGs, Ubuntu DEB/portable and checksum manifest. The installers remain unsigned, and real-device/clean-install validation is pending.
+
+All source, handover and documented design decisions stay in `main`. Further development must update diagrams when the actual architecture changes; do not present agent-based remote management, direct model deployment or measured throughput as currently implemented.
