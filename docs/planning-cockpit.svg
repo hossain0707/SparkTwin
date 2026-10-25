@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 650" width="1280" height="650" role="img" aria-labelledby="title desc">
+<title id="title">SparkTwin planning cockpit concept</title>
+<desc id="desc">Illustrative application composition with model settings, component memory bars and a scenario comparison. Sample values are for visual explanation and do not represent measured DGX Spark performance.</desc>
+<defs>
+<linearGradient id="back" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#081521"/><stop offset="1" stop-color="#112B3A"/></linearGradient>
+<linearGradient id="frame" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#183448"/><stop offset="1" stop-color="#132B3B"/></linearGradient>
+<linearGradient id="bar"><stop stop-color="#41CDAF"/><stop offset="1" stop-color="#75B6F9"/></linearGradient>
+</defs>
+<style>
+.blink{animation:blink 3.8s ease-in-out infinite}
+.grow{transform-box:fill-box;transform-origin:left center;animation:grow 5s ease-in-out infinite}
+.g2{animation-delay:-1.3s}.g3{animation-delay:-2.4s}.g4{animation-delay:-3.2s}
+.trace{stroke-dasharray:7 9;animation:trace 7s linear infinite}
+@keyframes blink{50%{opacity:.45}}@keyframes grow{0%,100%{transform:scaleX(.92)}50%{transform:scaleX(1)}}@keyframes trace{to{stroke-dashoffset:-112}}
+@media(prefers-reduced-motion:reduce){.blink,.grow,.trace{animation:none}}
+</style>
+<rect width="1280" height="650" rx="24" fill="url(#back)"/>
+<rect x="29" y="28" width="1222" height="585" rx="19" fill="#0A1B29" stroke="#31596C" stroke-width="2"/>
+<rect x="29" y="28" width="1222" height="55" rx="19" fill="#183041"/><rect x="29" y="63" width="1222" height="20" fill="#183041"/>
+<circle cx="59" cy="55" r="6" fill="#FB847A"/><circle cx="80" cy="55" r="6" fill="#F3CC6E"/><circle cx="101" cy="55" r="6" fill="#58DFAF"/>
+<text x="137" y="61" font-size="17" font-family="Arial,sans-serif" font-weight="700" fill="#F4FAFF">SparkTwin</text>
+<text x="983" y="60" font-size="12" font-family="Arial,sans-serif" fill="#A5C5D2">Planning cockpit · illustrative</text>
+<rect x="47" y="98" width="204" height="493" rx="13" fill="#102939"/>
+<text x="70" y="140" font-size="12" font-family="Arial,sans-serif" fill="#7DA4B9" letter-spacing="1">WORKSPACE</text>
+<rect x="60" y="158" width="177" height="47" rx="9" fill="#204F4B"/><rect x="64" y="173" width="5" height="17" rx="2" fill="#64E2C3"/><text x="82" y="187" font-size="16" fill="#D7FFF0" font-family="Arial,sans-serif" font-weight="700">Planner</text>
+<text x="81" y="250" font-size="16" fill="#B4CED9" font-family="Arial,sans-serif">Compare</text>
+<text x="81" y="309" font-size="16" fill="#B4CED9" font-family="Arial,sans-serif">Benchmarks</text>
+<text x="81" y="368" font-size="16" fill="#B4CED9" font-family="Arial,sans-serif">Host inspection</text>
+<text x="81" y="427" font-size="16" fill="#B4CED9" font-family="Arial,sans-serif">Reports</text>
+<line x1="70" x2="226" y1="499" y2="499" stroke="#2A4B5C"/>
+<text x="70" y="528" font-size="12" fill="#80AAAD" font-family="Arial,sans-serif">LOCAL WORKSPACE</text>
+<circle class="blink" cx="73" cy="558" r="5" fill="#54D8AE"/><text x="87" y="563" font-size="12" fill="#A2DDCF" font-family="Arial,sans-serif">No cloud service</text>
+<text x="289" y="138" font-size="28" font-weight="700" fill="#F1FAFF" font-family="Arial,sans-serif">Capacity planning</text>
+<text x="290" y="167" font-size="14" fill="#98B7C6" font-family="Arial,sans-serif">Understand the contribution of each memory component before deployment.</text>
+<rect x="290" y="192" width="286" height="153" rx="15" fill="url(#frame)" stroke="#365A70"/>
+<text x="310" y="223" font-size="13" font-family="Arial,sans-serif" fill="#96BBC9">MODEL SETTINGS</text>
+<text x="310" y="263" font-size="27" font-family="Arial,sans-serif" font-weight="700" fill="#F1FCFF">8B · 4-bit</text>
+<text x="311" y="293" font-size="13" font-family="Arial,sans-serif" fill="#A9C6D4">Illustrative parameterization</text>
+<rect x="311" y="309" width="125" height="23" rx="10" fill="#255043"/><text x="373" y="325" text-anchor="middle" font-size="11" fill="#9BF5CE" font-family="Arial,sans-serif">EDITABLE INPUTS</text>
+<rect x="592" y="192" width="300" height="153" rx="15" fill="url(#frame)" stroke="#365A70"/>
+<text x="614" y="223" font-size="13" font-family="Arial,sans-serif" fill="#96BBC9">CONTEXT / CONCURRENCY</text>
+<text x="614" y="262" font-size="28" font-family="Arial,sans-serif" font-weight="700" fill="#F1FCFF">8K <tspan fill="#7A9CAC" font-size="15">tokens</tspan></text>
+<text x="614" y="299" font-size="17" font-family="Arial,sans-serif" fill="#B8DEE6">4 parallel sequences</text>
+<rect x="908" y="192" width="315" height="153" rx="15" fill="url(#frame)" stroke="#365A70"/>
+<text x="932" y="223" font-size="13" font-family="Arial,sans-serif" fill="#96BBC9">TARGET DEVICE</text>
+<text x="932" y="260" font-size="26" font-family="Arial,sans-serif" font-weight="700" fill="#F1FCFF">DGX Spark</text>
+<text x="932" y="290" font-size="17" font-family="Arial,sans-serif" fill="#B1CDD9">128 GB unified memory</text>
+<rect x="932" y="310" width="154" height="23" rx="11" fill="#25424C"/><text x="1009" y="326" text-anchor="middle" font-family="Arial,sans-serif" font-size="11" fill="#B1DDF1">PROFILE ONLY</text>
+<rect x="290" y="362" width="606" height="222" rx="15" fill="#142C3B" stroke="#34576A"/>
+<text x="312" y="397" font-size="18" font-family="Arial,sans-serif" font-weight="700" fill="#EBFAFF">Memory allocation</text>
+<text x="312" y="419" font-size="12" font-family="Arial,sans-serif" fill="#92B7C5">Relative component illustration — not observed memory use</text>
+<g font-family="Arial,sans-serif" font-size="13" fill="#A9C6D1"><text x="313" y="462">Weights</text><text x="313" y="494">KV cache</text><text x="313" y="526">Runtime / reserves</text></g>
+<g fill="#244858"><rect x="473" y="448" width="380" height="16" rx="6"/><rect x="473" y="480" width="380" height="16" rx="6"/><rect x="473" y="512" width="380" height="16" rx="6"/></g>
+<g fill="url(#bar)"><rect class="grow" x="473" y="448" width="265" height="16" rx="6"/><rect class="grow g2" x="473" y="480" width="153" height="16" rx="6"/><rect class="grow g3" x="473" y="512" width="108" height="16" rx="6"/></g>
+<text x="313" y="555" font-size="12" font-family="Arial,sans-serif" fill="#84B9AE">Exact estimates come from the user's model geometry and configured assumptions.</text>
+<rect x="910" y="362" width="313" height="222" rx="15" fill="#142C3B" stroke="#34576A"/>
+<text x="930" y="397" font-size="18" font-family="Arial,sans-serif" font-weight="700" fill="#EBFAFF">Evidence policy</text>
+<text x="932" y="433" font-size="14" font-family="Arial,sans-serif" fill="#C2DCE3">Memory fit: modeled</text>
+<circle cx="1194" cy="429" r="6" fill="#6FD2B4"/>
+<text x="932" y="471" font-size="14" font-family="Arial,sans-serif" fill="#C2DCE3">Throughput: not measured</text>
+<circle cx="1194" cy="467" r="6" fill="#EABF72"/>
+<text x="932" y="509" font-size="14" font-family="Arial,sans-serif" fill="#C2DCE3">Benchmark provenance</text>
+<circle cx="1194" cy="505" r="6" fill="#7EADE9"/>
+<text x="931" y="552" font-size="12" font-family="Arial,sans-serif" fill="#88A7B8">Measured inputs required for calibration.</text>
+<text x="39" y="636" font-size="12" font-family="Arial,sans-serif" fill="#809BAB">VISUAL DESIGN STUDY · Not an actual screenshot and not a measured DGX Spark session</text>
+</svg>
