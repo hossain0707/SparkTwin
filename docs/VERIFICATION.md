@@ -16,7 +16,7 @@ System Chromium is present but sandbox policy returned `net::ERR_BLOCKED_BY_ADMI
 
 | Gate | State |
 | --- | --- |
-| Windows/macOS/Linux CI matrix and packaged artifacts | Workflow configured; results not yet confirmed |
+| Windows/macOS/Linux CI matrix and packaged artifacts | **Verified**: successful GitHub Actions run 40151668581; tagged unsigned preview v0.1.0-preview.7 published |
 | Clean machine Windows executable | Pending |
 | Mac Intel/Apple Silicon installed DMG test | Pending |
 | Ubuntu DEB installed and launched | Pending |
