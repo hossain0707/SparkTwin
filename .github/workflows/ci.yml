@@ -78,7 +78,10 @@ jobs:
       - name: Windows packaged asset and Python integrity
         if: runner.os == 'Windows'
         shell: pwsh
-        run: '& .\dist\SparkTwin\SparkTwin.exe --self-test; if ($LASTEXITCODE -ne 0) { exit 1 }'
+        run: |
+          $process = Start-Process -FilePath ".\\dist\\SparkTwin\\SparkTwin.exe" -ArgumentList "--self-test" -Wait -PassThru
+          Write-Host "SparkTwin packaged self-test exit code: $($process.ExitCode)"
+          if ($process.ExitCode -ne 0) { throw "Windows packaged self-test failed" }
       - name: Windows portable ZIP
         if: runner.os == 'Windows'
         shell: pwsh
