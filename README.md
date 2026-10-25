@@ -92,6 +92,9 @@ The GitHub Actions workflow **builds unsigned development candidates** for Windo
 
 Until GitHub Actions produces and verifies these artifacts, these are *build targets*, not verified downloadable releases. Windows signing, macOS notarization and clean-machine acceptance are future release gates. [Platform installation and CI guide](docs/RELEASE.md).
 
+
+**Verified cross-platform CI:** On 2026-10-25, [workflow run 40151668581](https://github.com/hossain0707/SparkTwin/actions/runs/40151668581) completed **13/13 jobs successfully**, including 9 OS/Python test combinations and all four packaged targets. Downloadable unsigned preview artifacts were published for Windows x64, macOS Apple Silicon, macOS Intel and Ubuntu x64. This is build verification, **not** clean-machine installation, real DGX Spark hardware acceptance or code signing.
+
 ## Quick scenario example
 
 Choose the illustrative generic 8B model, 4-bit weights, 32 layers, 8 KV heads, FP16 KV cache, 8192 tokens and four concurrent sequences. The application computes a first-order memory demand and budget breakdown. Those numbers are **scenario assumptions**, not a benchmark of a particular checkpoint. Change any setting and observe the impact instantly.

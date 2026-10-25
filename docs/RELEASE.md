@@ -27,3 +27,8 @@ These are **targets**, not verified releases until the actual workflows succeed 
 ## Developer package procedure
 
 `python -m pip install -e '.[build,dev]'`; `python -m pytest -q`; `pyinstaller --onedir --windowed --name SparkTwin --add-data "sparktwin/web:sparktwin/web" --collect-all webview desktop_launcher.py` (use semicolon instead of colon on Windows). Run packaged binary with `--self-test`.
+
+## Preview artifact availability — 2026-10-25
+
+**Verified cross-platform CI:** On 2026-10-25, [workflow run 40151668581](https://github.com/hossain0707/SparkTwin/actions/runs/40151668581) completed **13/13 jobs successfully**, including 9 OS/Python test combinations and all four packaged targets. Downloadable unsigned preview artifacts were published for Windows x64, macOS Apple Silicon, macOS Intel and Ubuntu x64. This is build verification, **not** clean-machine installation, real DGX Spark hardware acceptance or code signing.
+

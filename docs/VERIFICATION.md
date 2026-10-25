@@ -26,3 +26,8 @@ System Chromium is present but sandbox policy returned `net::ERR_BLOCKED_BY_ADMI
 | Model-estimator held-out real-world validation | Pending |
 
 **Do not use percentages of project completion or claim full production readiness without evidence.**
+
+## CI package-build evidence
+
+**Verified cross-platform CI:** On 2026-10-25, [workflow run 40151668581](https://github.com/hossain0707/SparkTwin/actions/runs/40151668581) completed **13/13 jobs successfully**, including 9 OS/Python test combinations and all four packaged targets. Downloadable unsigned preview artifacts were published for Windows x64, macOS Apple Silicon, macOS Intel and Ubuntu x64. This is build verification, **not** clean-machine installation, real DGX Spark hardware acceptance or code signing.
+

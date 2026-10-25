@@ -33,6 +33,10 @@
 
 **Never describe** analytic memory-fit heuristics as validated deployability, bandwidth ceiling as tokens/sec, or a user-entered throughput record as a measured SparkTwin result.
 
+## Latest build evidence
+
+**Verified cross-platform CI:** On 2026-10-25, [workflow run 40151668581](https://github.com/hossain0707/SparkTwin/actions/runs/40151668581) completed **13/13 jobs successfully**, including 9 OS/Python test combinations and all four packaged targets. Downloadable unsigned preview artifacts were published for Windows x64, macOS Apple Silicon, macOS Intel and Ubuntu x64. This is build verification, **not** clean-machine installation, real DGX Spark hardware acceptance or code signing.
+
 ## Highest-priority remaining work
 
 1. Run CI on GitHub and examine every OS matrix result. Address pywebview/backend bundling failures, including Linux WebKitGTK, without hiding them.
