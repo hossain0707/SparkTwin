@@ -1,11 +1,44 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="465" viewBox="0 0 1280 465" role="img" aria-labelledby="title desc">
-<title id="title">SparkTwin — Digital twin for private AI capacity planning</title><desc id="desc">Dark gradient banner with an orbital hardware digital twin and explanation of offline memory modeling.</desc>
-<defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#08111d"/><stop offset=".48" stop-color="#102739"/><stop offset="1" stop-color="#0b1525"/></linearGradient><linearGradient id="accent"><stop stop-color="#50e9c0"/><stop offset="1" stop-color="#8bb5ff"/></linearGradient><radialGradient id="glow"><stop stop-color="#1fa98c" stop-opacity=".20"/><stop offset="1" stop-color="#1fa98c" stop-opacity="0"/></radialGradient></defs>
-<style>.ring{transform-origin:960px 229px;animation:spin 18s linear infinite}.reverse{animation:spin 27s linear reverse infinite}.flow{stroke-dasharray:9 10;animation:dash 6s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}@keyframes dash{to{stroke-dashoffset:-100}}@media(prefers-reduced-motion:reduce){.ring,.reverse,.flow{animation:none}}</style>
-<rect width="1280" height="465" rx="25" fill="url(#bg)"/><circle cx="980" cy="228" r="280" fill="url(#glow)"/><g stroke="#1d3c49" opacity=".35"><path d="M0 93H1280M0 184H1280M0 275H1280M0 366H1280M104 0V465M208 0V465M312 0V465M416 0V465M520 0V465M624 0V465M728 0V465M832 0V465M936 0V465M1040 0V465M1144 0V465"/></g>
-<rect x="55" y="39" width="48" height="48" rx="14" fill="#194238" stroke="#46af9b"/><circle cx="79" cy="63" r="14" fill="none" stroke="#69edc8" stroke-width="2"/><ellipse cx="79" cy="63" rx="8" ry="18" transform="rotate(40 79 63)" stroke="#94b0ff" fill="none" stroke-width="2"/><circle cx="79" cy="63" r="5" fill="#5deec7"/><text x="121" y="70" font-size="26" font-family="Arial,sans-serif" font-weight="700" fill="#f1f8ff">SparkTwin</text><text x="55" y="148" font-family="Arial,sans-serif" font-size="11" font-weight="700" letter-spacing="3.5" fill="#70d2b7">PRIVATE AI INFRASTRUCTURE WORKBENCH</text>
-<text x="52" y="210" font-family="Arial,sans-serif" font-size="50" font-weight="700" letter-spacing="-1.2" fill="#f1f9ff">Know the memory limit.</text><text x="52" y="269" font-family="Arial,sans-serif" font-size="50" font-weight="700" letter-spacing="-1.2" fill="url(#accent)">Before deployment.</text><text x="55" y="320" font-family="Arial,sans-serif" font-size="18" fill="#a8c3d1">Model. Compare. Calibrate. Document.</text><text x="55" y="348" font-family="Arial,sans-serif" font-size="15" fill="#7f9cae">NVIDIA DGX Spark &amp; custom unified-memory systems</text>
-<rect x="55" y="389" width="200" height="37" rx="10" fill="#1a5049" stroke="#2e8e7b"/><text x="155" y="413" text-anchor="middle" font-family="Arial,sans-serif" font-size="13" fill="#bffce9">LOCAL-FIRST · NO TELEMETRY</text><rect x="273" y="389" width="183" height="37" rx="10" fill="#1b3045" stroke="#34576a"/><text x="365" y="413" text-anchor="middle" font-family="Arial,sans-serif" font-size="13" fill="#cee6f6">EARLY ACCESS · v0.1</text>
-<g class="ring"><ellipse cx="960" cy="229" rx="230" ry="109" transform="rotate(28 960 229)" fill="none" stroke="#74d9c1" stroke-opacity=".55" stroke-width="2"/><circle cx="1190" cy="229" r="8" fill="#59eabc"/></g><g class="ring reverse"><ellipse cx="960" cy="229" rx="160" ry="217" transform="rotate(30 960 229)" fill="none" stroke="#90b8ff" stroke-opacity=".42" stroke-width="2"/><circle cx="960" cy="12" r="7" fill="#89b6fc"/></g>
-<circle cx="960" cy="229" r="138" fill="#12333d" stroke="#3c857a" stroke-width="2"/><circle cx="960" cy="229" r="105" fill="none" stroke="#56c8b0" stroke-opacity=".5"/><rect x="896" y="167" width="128" height="127" rx="24" fill="#173e4b" stroke="#61cdb8"/><g fill="none" stroke="#5ed7b9" stroke-width="3"><rect x="929" y="196" width="62" height="59" rx="9"/><path d="M920 205H904M920 219H904M920 233H904M920 247H904M1000 205H1015M1000 219H1015M1000 233H1015M1000 247H1015"/></g><text x="960" y="230" font-size="16" text-anchor="middle" font-family="Arial,sans-serif" font-weight="800" fill="#e9fff8">128 GB</text><text x="960" y="275" text-anchor="middle" font-size="13" fill="#aacbd3" font-family="Arial,sans-serif">UNIFIED</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 480" width="1280" height="480" role="img" aria-labelledby="t d">
+<title id="t">SparkTwin — Know before you deploy</title><desc id="d">Animated concept artwork showing an AI model's memory budget on a local-first capacity planner. All bars are illustrative, not live benchmark readings.</desc>
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#07111E"/><stop offset=".48" stop-color="#10293B"/><stop offset="1" stop-color="#071A2B"/></linearGradient>
+  <linearGradient id="mint" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#48E4BB"/><stop offset="1" stop-color="#7EB8FF"/></linearGradient>
+  <linearGradient id="pane" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#19394A"/><stop offset="1" stop-color="#11293C"/></linearGradient>
+  <radialGradient id="glow"><stop stop-color="#2CE2BC" stop-opacity=".16"/><stop offset="1" stop-color="#2CE2BC" stop-opacity="0"/></radialGradient>
+</defs>
+<style>
+.orbit{transform-origin:1011px 239px;animation:orbit 28s linear infinite}.orbitB{transform-origin:1011px 239px;animation:orbit 39s linear reverse infinite}
+.breathe{animation:breathe 6s ease-in-out infinite}.tracer{stroke-dasharray:12 18;animation:dash 8s linear infinite}
+@keyframes orbit{to{transform:rotate(360deg)}}@keyframes breathe{50%{opacity:.45;transform:translateY(-4px)}}@keyframes dash{to{stroke-dashoffset:-120}}
+@media(prefers-reduced-motion:reduce){.orbit,.orbitB,.breathe,.tracer{animation:none}}
+</style>
+<rect width="1280" height="480" rx="25" fill="url(#bg)"/>
+<circle cx="1010" cy="236" r="301" fill="url(#glow)"/>
+<g opacity=".25" stroke="#31536B" stroke-width="1"><path d="M50 400H1230M50 320H1230M50 240H1230M50 160H1230M50 80H1230M180 38V441M340 38V441M500 38V441M660 38V441M820 38V441M980 38V441M1140 38V441"/></g>
+<g transform="translate(56 38)">
+<rect width="49" height="49" rx="15" fill="#194339" stroke="#4CD9B8"/>
+<circle cx="24.5" cy="24.5" r="14" fill="none" stroke="#78F2CC" stroke-width="2.5"/><ellipse cx="24.5" cy="24.5" rx="8" ry="18" transform="rotate(45 24.5 24.5)" fill="none" stroke="#8CB9FF" stroke-width="2"/><circle cx="24.5" cy="24.5" r="4" fill="#6DF0C7"/>
+</g>
+<text x="123" y="71" font-family="Arial,sans-serif" font-size="28" fill="#F0FAFF" font-weight="700">SparkTwin</text>
+<rect x="292" y="44" width="160" height="28" rx="14" fill="#1B3A48" stroke="#2C6372"/><text x="372" y="63" text-anchor="middle" fill="#A9F5DB" font-family="Arial,sans-serif" font-size="12" font-weight="700">DEVELOPER PREVIEW</text>
+<text x="55" y="145" font-family="Arial,sans-serif" font-size="13" fill="#73DAC1" font-weight="700" letter-spacing="2.5">LOCAL-FIRST AI CAPACITY INTELLIGENCE</text>
+<text x="51" y="214" font-family="Arial,sans-serif" font-size="55" fill="#F3FAFF" font-weight="700" letter-spacing="-1.6">Know before</text>
+<text x="51" y="277" font-family="Arial,sans-serif" font-size="55" fill="url(#mint)" font-weight="700" letter-spacing="-1.6">you deploy.</text>
+<text x="56" y="324" font-family="Arial,sans-serif" font-size="19" fill="#B1CBD8">Model memory. Explore trade-offs. Ground decisions in evidence.</text>
+<text x="56" y="354" font-family="Arial,sans-serif" font-size="15" fill="#91AEBD">DGX Spark and custom unified-memory inference hosts</text>
+<rect x="55" y="399" width="194" height="39" rx="10" fill="#194438" stroke="#39785F"/><text x="152" y="424" font-family="Arial,sans-serif" font-size="13" font-weight="700" text-anchor="middle" fill="#D3FFEC">PRIVATE BY DEFAULT</text>
+<rect x="265" y="399" width="187" height="39" rx="10" fill="#1D3447" stroke="#365D76"/><text x="358" y="424" font-family="Arial,sans-serif" font-size="13" text-anchor="middle" fill="#D5E9F9">WIN · MAC · LINUX</text>
+<g class="orbit"><ellipse cx="1011" cy="239" rx="245" ry="102" transform="rotate(28 1011 239)" fill="none" stroke="#56D6B7" stroke-opacity=".55" stroke-width="2"/><circle cx="1251" cy="239" r="7" fill="#69EFC9"/></g>
+<g class="orbitB"><ellipse cx="1011" cy="239" rx="168" ry="224" transform="rotate(24 1011 239)" fill="none" stroke="#80B6FE" stroke-opacity=".45" stroke-width="2"/><circle cx="1011" cy="15" r="7" fill="#80B6FE"/></g>
+<circle cx="1011" cy="239" r="144" fill="#112936" stroke="#356D77" stroke-width="2"/>
+<circle cx="1011" cy="239" r="112" fill="none" stroke="#3EAF99" stroke-opacity=".6"/>
+<rect x="946" y="166" width="130" height="148" rx="23" fill="url(#pane)" stroke="#5CCCB7" stroke-width="2"/>
+<g fill="none" stroke="#64E8C5" stroke-width="2.5">
+<rect x="974" y="193" width="75" height="61" rx="10"/>
+<path d="M961 204H946M961 218H946M961 232H946M1062 204H1077M1062 218H1077M1062 232H1077"/>
+</g>
+<text x="1011" y="223" font-size="17" font-family="Arial,sans-serif" font-weight="700" text-anchor="middle" fill="#E9FFF6">128 GB</text>
+<text x="1011" y="282" font-size="12" font-family="Arial,sans-serif" font-weight="700" text-anchor="middle" fill="#A9D7CF" letter-spacing="1">UNIFIED MEMORY</text>
+<path class="tracer" d="M748 386H1240" fill="none" stroke="#409A91" stroke-width="2" opacity=".7"/>
+<text x="1251" y="452" font-size="11" font-family="Arial,sans-serif" text-anchor="end" fill="#809CAB">CONCEPT ART • NO LIVE BENCHMARKS</text>
 </svg>
